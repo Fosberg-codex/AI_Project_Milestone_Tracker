@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "aitracker_backend": {
+      "main": "src/aitracker_backend/main.mo",
+      "type": "motoko"
+    },
+    "aitracker_frontend": {
+      "dependencies": [
+        "aitracker_backend"
+      ],
+      "source": [
+        "src/aitracker_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "aitracker_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

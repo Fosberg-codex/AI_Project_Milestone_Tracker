@@ -1,59 +1,186 @@
-# `aitracker`
+# AI Projects Milestone Tracker
 
-Welcome to your new `aitracker` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+AI Projects Milestone Tracker is a full-stack application designed for AI teams to seamlessly track and manage the progress of their AI projects. Built on the Internet Computer (ICP) and powered by Motoko, this platform combines decentralized technology with a user-friendly interface to ensure efficient project management.
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
+## Key Features
 
-To learn more before you start working with `aitracker`, see the following documentation available online:
+- **Milestone Management**: Define, update, and track project milestones with ease.
+- **Status Options**: Predefined milestone statuses to standardize progress tracking.
+- **Completion Tracking**: Manually set and view milestone completion dates.
+- **Decentralized Backend**: Powered by Motoko, leveraging ICP's decentralized architecture for reliability and scalability.
+- **Dynamic Frontend**: React-based interface providing an intuitive user experience.
 
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
+---
 
-If you want to start working on your project right away, you might want to try the following commands:
+## Getting Started
 
-```bash
-cd aitracker/
-dfx help
-dfx canister --help
+### Prerequisites
+
+To run this project, ensure you have the following tools installed:
+
+- **DFX SDK**: Internet Computer SDK for development and deployment. [Install DFX](https://internetcomputer.org/docs/current/developer-docs/setup/install)
+- **Node.js**: JavaScript runtime for frontend development.
+- **npm**: Package manager for JavaScript.
+
+### Project Structure
+
+The project is organized as follows:
+
+```
+AI-Milestone-Tracker/
+├── src/
+│   ├── declarations/      # Auto-generated type declarations
+│   ├── aitracker_backend/ # Backend canister code
+│   │   ├── main.mo        # Core backend logic
+│   │   └── types.mo       # Type definitions
+│   └── aitracker_frontend/ # Frontend application
+│       ├── src/           # React components and pages
+│       ├── assets/        # Static assets
+│       └── package.json   # Frontend dependencies
+├── dfx.json               # Project configuration
+├── package.json           # Root package.json
+└── README.md              # Project documentation
 ```
 
-## Running the project locally
+---
 
-If you want to test your project locally, you can use the following commands:
+## Running the Project Locally
+
+### Step 1: Start the Replica
+
+Start the local ICP replica to emulate the Internet Computer environment:
 
 ```bash
-# Starts the replica, running in the background
-dfx start --background
+dfx start --clean --background
+```
 
-# Deploys your canisters to the replica and generates your candid interface
+### Step 2: Deploy the Canisters
+
+Deploy both backend and frontend canisters to the local replica:
+
+```bash
 dfx deploy
 ```
 
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
+Once deployment is complete, your application will be available at:
 
-If you have made changes to your backend canister, you can generate a new candid interface with
-
-```bash
-npm run generate
+```plaintext
+http://localhost:4943?canisterId=<frontend_canister_id>
 ```
 
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
+### Step 3: Start the Frontend
 
-If you are making frontend changes, you can start a development server with
+For frontend development, start the React development server:
 
 ```bash
 npm start
 ```
 
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+This will start a server at `http://localhost:8080`, proxying API requests to the replica.
 
-### Note on frontend environment variables
+---
 
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
+## Interacting with the Backend
 
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+The backend canister, written in Motoko, provides core functionality for managing milestones. Use the following commands to interact with the backend:
+
+### Viewing the Backend Candid Interface
+
+You can inspect the backend's Candid interface using:
+
+```bash
+dfx canister call <backend_canister_id> __get_candid_interface_tmp_hack
+```
+
+### Adding a Milestone via Candid
+
+Use the Candid interface to add a new milestone:
+
+```bash
+dfx canister call <backend_canister_id> addMilestone '("Milestone Title", "Status", "Completion Date")'
+```
+
+---
+
+## Deployment to the Internet Computer
+
+Deploying to the ICP mainnet follows similar steps:
+
+1. Update the `dfx.json` file to set the network to `ic`:
+
+    ```json
+    {
+      "networks": {
+        "ic": {
+          "providers": ["https://ic0.app"],
+          "type": "persistent"
+        }
+      }
+    }
+    ```
+
+2. Deploy the canisters to the mainnet:
+
+    ```bash
+    dfx deploy --network ic
+    ```
+
+3. Access your app at the generated ICP URL.
+
+---
+
+## Technical Details
+
+### Backend: Motoko
+- **Language**: Motoko
+- **Key Components**:
+  - Canister storage for milestone data.
+  - CRUD operations for managing milestones.
+
+### Frontend: React
+- **Framework**: React
+- **Routing**: React Router
+- **State Management**: Context API/State Hooks
+
+### ICP Advantages
+- **Scalability**: Operates seamlessly on a global decentralized network.
+- **Security**: Leverages cryptographic guarantees for data integrity.
+- **Cost Efficiency**: Offers low hosting costs for decentralized applications.
+
+---
+
+## Useful Commands
+
+```bash
+# Start the ICP replica
+$ dfx start --clean --background
+
+# Deploy canisters
+$ dfx deploy
+
+# View canister details
+$ dfx canister info <canister_name>
+
+# Call canister methods
+$ dfx canister call <canister_name> <method_name>
+```
+
+---
+
+## Resources
+
+- [Internet Computer Documentation](https://internetcomputer.org/docs/current/developer-docs/)
+- [Motoko Programming Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
+- [React Documentation](https://react.dev)
+
+---
+
+## Contributing
+
+Contributions are welcome! Feel free to submit issues or pull requests.
+
+---
+
+## License
+
+This project is licensed under the MIT License. See `LICENSE` for details.
